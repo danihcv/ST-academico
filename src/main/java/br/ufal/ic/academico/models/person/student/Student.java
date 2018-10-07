@@ -37,9 +37,7 @@ public class Student extends Person {
     }
 
     public Student(StudentDTO entity) {
-        super(entity.firstName, entity.lastName, "STUDENT");
-        credits = 0;
-        completedDisciplines = new ArrayList<>();
+        this(entity.firstName, entity.lastName);
     }
 
     public void update(StudentDTO entity) {

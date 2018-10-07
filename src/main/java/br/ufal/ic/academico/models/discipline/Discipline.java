@@ -42,31 +42,14 @@ public class Discipline {
     public Discipline(String name, String code, Integer credits, Integer requiredCredits, List<String> requiredDisciplines) {
         this.name = name;
         this.code = code;
-        this.credits = credits;
-        this.requiredCredits = requiredCredits;
-        this.requiredDisciplines = requiredDisciplines;
+        this.credits = credits != null ? credits : 0;
+        this.requiredCredits = requiredCredits != null ? requiredCredits : 0;
+        this.requiredDisciplines = requiredDisciplines != null ? requiredDisciplines : new ArrayList<>();
         this.students = new ArrayList<>();
     }
 
     public Discipline(DisciplineDTO entity) {
-        this.code = entity.code;
-        this.name = entity.name;
-        if (entity.credits != null) {
-            this.credits = entity.credits;
-        } else {
-            this.credits = 0;
-        }
-        if (entity.requiredCredits != null) {
-            this.requiredCredits = entity.requiredCredits;
-        } else {
-            this.requiredCredits = 0;
-        }
-        if (entity.requiredDisciplines != null) {
-            this.requiredDisciplines = entity.requiredDisciplines;
-        } else {
-            this.requiredDisciplines = new ArrayList<>();
-        }
-        this.students = new ArrayList<>();
+        this(entity.name, entity.code, entity.credits, entity.requiredCredits, entity.requiredDisciplines);
     }
 
     public void update(DisciplineDTO entity) {

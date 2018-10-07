@@ -24,8 +24,7 @@ public class Course {
     List<Discipline> disciplines;
 
     public Course(CourseDTO entity) {
-        this.name = entity.name;
-        this.disciplines = new ArrayList<>();
+        this(entity.name);
     }
 
     public Course(String name) {

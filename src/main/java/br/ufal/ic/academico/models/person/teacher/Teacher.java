@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @RequiredArgsConstructor
 public class Teacher extends Person {
     public Teacher(TeacherDTO entity) {
-        super(entity.firstName, entity.lastName, "TEACHER");
+        this(entity.firstName, entity.lastName);
     }
 
     public Teacher(String firstName, String lastName) {

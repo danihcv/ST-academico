@@ -23,7 +23,7 @@ public class Department {
     Secretary graduation, postGraduation;
 
     public Department(DepartmentDTO entity) {
-        this.name = entity.name;
+        this(entity.name);
     }
 
     public Department(String name) {

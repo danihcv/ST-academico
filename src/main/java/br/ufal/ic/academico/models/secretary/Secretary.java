@@ -23,8 +23,7 @@ public class Secretary {
     List<Course> courses;
 
     public Secretary(SecretaryDTO entity) {
-        this.type = entity.type.toUpperCase().equals("POST-GRADUATION") ? "POST-GRADUATION" : "GRADUATION";
-        this.courses = new ArrayList<>();
+        this(entity.type);
     }
 
     public Secretary(String type) {
