@@ -1,4 +1,4 @@
-package br.ufal.ic.academico;
+package br.ufal.ic.academico.resources;
 
 import br.ufal.ic.academico.models.department.Department;
 import br.ufal.ic.academico.models.department.DepartmentDAO;

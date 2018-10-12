@@ -15,6 +15,7 @@ import br.ufal.ic.academico.models.person.teacher.Teacher;
 import br.ufal.ic.academico.models.person.teacher.TeacherDAO;
 import br.ufal.ic.academico.models.secretary.Secretary;
 import br.ufal.ic.academico.models.secretary.SecretaryDAO;
+import br.ufal.ic.academico.resources.*;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
