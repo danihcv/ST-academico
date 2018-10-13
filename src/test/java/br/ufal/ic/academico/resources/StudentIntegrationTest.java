@@ -15,7 +15,6 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -43,7 +42,7 @@ class StudentIntegrationTest extends IntegrationTestBase {
                         }).size(),
                 "Quantidade de Students listados, a partir do banco de dados, é diferente da quantidade cadastrada");
 
-        deleteStudent();
+        deleteStudent(students.get(0));
 
         assertEquals(students.size(), RULE.client().target(url + "enrollment/student").request()
                         .get(new GenericType<ArrayList<StudentDTO>>() {
@@ -68,6 +67,10 @@ class StudentIntegrationTest extends IntegrationTestBase {
         getEnrollmentProof(studentIC, 1);
         getEnrollmentProof(studentFDA, 0);
         completeDisciplineFromStudent(studentIC, discipline, studentFDA);
+
+        discipline = background.createDiscipline(RULE, course, "CC002", "Programação 2", 50);
+        discipline = enrollStudentInDiscipline(studentIC, discipline, studentFDA);
+        deleteEnrolledStudent(studentIC, department, secretary, course, discipline);
     }
 
     private void createStudents() {
@@ -139,12 +142,11 @@ class StudentIntegrationTest extends IntegrationTestBase {
         return response;
     }
 
-    private void deleteStudent() {
+    private void deleteStudent(StudentDTO original) {
         assertThrows(NotFoundException.class, () -> RULE.client().target(url + "enrollment/student/0").request()
                         .delete(StudentDTO.class),
                 "API não retornou status 404 ao tentar deletar um Student com ID inválido");
 
-        final StudentDTO original = students.get(0);
         students.remove(original);
         assertDoesNotThrow(() -> RULE.client().target(url + "enrollment/student/" + original.id).request()
                 .delete(), "Falhou ao tentar deletar um Student com ID válido");
@@ -244,5 +246,20 @@ class StudentIntegrationTest extends IntegrationTestBase {
                 .get(EnrollmentResources.Proof.class);
         assertEquals(student.getId(), response.getId(), "ID do Student do comprovante retornado é diferente do ID informado");
         assertEquals(expectedDisciplineQuantity, response.getDisciplines().size(), "Comprovante do Student não possui nenhuma Discipline");
+    }
+
+    private void deleteEnrolledStudent(StudentDTO student, DepartmentDTO department, SecretaryDTO secretary, CourseDTO course,
+                                       DisciplineDTO discipline) {
+        assertDoesNotThrow(() -> RULE.client().target(url + "enrollment/student/" + student.getId()).request()
+                .delete(StudentDTO.class), "Falhou ao deletar um Student matriculado em uma Discipline");
+
+        assertDoesNotThrow(() -> RULE.client().target(url + "department/" + department.getId()).request().get(DepartmentDTO.class),
+                "Falhou ao recuperar o Department do Student deletado");
+        assertDoesNotThrow(() -> RULE.client().target(url + "secretary/" + secretary.getId()).request().get(SecretaryDTO.class),
+                "Falhou ao recuperar a Secretary do Student deletado");
+        assertDoesNotThrow(() -> RULE.client().target(url + "course/" + course.getId()).request().get(CourseDTO.class),
+                "Falhou ao recuperar o Course do Student deletado");
+        assertDoesNotThrow(() -> RULE.client().target(url + "discipline/" + discipline.getId()).request().get(DisciplineDTO.class),
+                "Falhou ao recuperar a Discipline que o Student deletado estava matriculado");
     }
 }

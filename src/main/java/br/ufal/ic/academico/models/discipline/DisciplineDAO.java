@@ -25,6 +25,7 @@ public class DisciplineDAO extends GeneralDAO<Discipline> {
     public Course getCourse(Discipline discipline) {
         ArrayList<Course> courses = (ArrayList<Course>) currentSession().createQuery("from Course").list();
         for (Course c : courses) {
+            assert c.getDisciplines() != null;
             for (Discipline d : c.getDisciplines()) {
                 if (d.getId().equals(discipline.getId())) {
                     return c;
@@ -67,8 +68,7 @@ public class DisciplineDAO extends GeneralDAO<Discipline> {
         return secretaryDAO.getDepartment(secretary);
     }
 
-    public List<Discipline> deallocateTeacherFromAllDisciplines(Teacher t) {
-        List<Discipline> disciplines = new ArrayList<>();
+    public void deallocateTeacherFromAllDisciplines(Teacher t) {
         List<Discipline> allDisciplines = this.getAll();
         for (Discipline d : allDisciplines) {
             if (d.teacher != null && d.teacher.getId().equals(t.getId())) {
@@ -76,6 +76,15 @@ public class DisciplineDAO extends GeneralDAO<Discipline> {
                 this.persist(d);
             }
         }
-        return disciplines;
+    }
+
+    public void disenrollStudentFromAll(Student student) {
+        List<Discipline> allDisciplines = this.getAll();
+        for (Discipline d : allDisciplines) {
+            if (d.students != null && d.students.contains(student)) {
+                d.removeStudent(student);
+                this.persist(d);
+            }
+        }
     }
 }

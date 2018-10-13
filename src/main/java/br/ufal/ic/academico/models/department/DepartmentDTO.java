@@ -1,10 +1,7 @@
 package br.ufal.ic.academico.models.department;
 
 import br.ufal.ic.academico.models.secretary.SecretaryDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class DepartmentDTO {
-    Long id;
-    String name;
-    List<SecretaryDTO> secretaries = new ArrayList<>();
+    public Long id;
+    public String name;
+    public List<SecretaryDTO> secretaries = new ArrayList<>();
 
     public DepartmentDTO(Department entity) {
         this.id = entity.getId();

@@ -97,6 +97,9 @@ public class EnrollmentResources {
         if (s == null) {
             return Response.status(404).entity("Student not found.").build();
         }
+        disciplineDAO.disenrollStudentFromAll(s);
+        s.setCourse(null);
+        studentDAO.persist(s);
         studentDAO.delete(s);
         return Response.status(Response.Status.NO_CONTENT).build();
     }

@@ -38,6 +38,10 @@ public class DepartmentResources {
     public Response create(DepartmentDTO entity) {
         log.info("create department: {}", entity);
 
+        if (entity.getName() == null || entity.getName().trim().isEmpty()) {
+            return Response.status(400).entity("Department name is required.").build();
+        }
+
         Department d = new Department(entity);
         return Response.ok(new DepartmentDTO(departmentDAO.persist(d))).build();
     }

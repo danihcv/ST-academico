@@ -34,7 +34,7 @@ public class SecretaryDTO {
     @RequiredArgsConstructor
     @AllArgsConstructor
     @ToString
-    private class DisciplineDTO {
+    public static class DisciplineDTO {
         Long id;
         String code, name;
         Integer credits, requiredCredits;
