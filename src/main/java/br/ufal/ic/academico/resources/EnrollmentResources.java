@@ -151,7 +151,7 @@ public class EnrollmentResources {
         t.update(entity);
         return Response.ok(new TeacherDTO(teacherDAO.persist(t))).build();
     }
-// ToDo Resolver esse DELETE
+
     @DELETE
     @Path("/teacher/{id}")
     @UnitOfWork
@@ -225,13 +225,18 @@ public class EnrollmentResources {
         }
 
         List<DisciplineDTO> dtoList = new ArrayList<>();
+        List<Course> courses = new ArrayList<>();
         if (department.getGraduation() != null) {
-            for (Course c : department.getGraduation().getCourses()) {
-                List<Discipline> res = c.getDisciplines();
-                if (res != null) {
-                    dtoList.addAll(res.stream().map(DisciplineDTO::new).collect(Collectors.toList()));
-                }
-            }
+            courses.addAll(department.getGraduation().getCourses());
+        }
+        if (department.getPostGraduation() != null) {
+            courses.addAll(department.getPostGraduation().getCourses());
+        }
+
+        for (Course c : courses) {
+            List<Discipline> res = c.getDisciplines();
+            assert(res != null);
+            dtoList.addAll(res.stream().map(DisciplineDTO::new).collect(Collectors.toList()));
         }
         return Response.ok(dtoList).build();
     }
@@ -273,7 +278,7 @@ public class EnrollmentResources {
         if (d == null) {
             return Response.status(404).entity("Discipline not found.").build();
         }
-        if (!d.removeStudent(s)) {
+        if (!d.getStudents().contains(s)) {
             return Response.status(400).entity("Student isn't enrolled at this discipline.").build();
         }
 
@@ -318,8 +323,7 @@ public class EnrollmentResources {
     @Getter
     @AllArgsConstructor
     @RequiredArgsConstructor
-    @ToString
-    private class Proof {
+    static class Proof {
         Long id;
         String name;
         List<ProofDiscipline> disciplines;
@@ -328,8 +332,7 @@ public class EnrollmentResources {
     @Getter
     @AllArgsConstructor
     @RequiredArgsConstructor
-    @ToString
-    private class ProofDiscipline {
+    public static class ProofDiscipline {
         String code, name;
     }
 }

@@ -41,9 +41,7 @@ public class DisciplineDTO {
 
     @Getter
     @RequiredArgsConstructor
-    @AllArgsConstructor
-    @ToString
-    private class StudentDTO {
+    public static class StudentDTO {
         public Long id;
         public String name;
 
