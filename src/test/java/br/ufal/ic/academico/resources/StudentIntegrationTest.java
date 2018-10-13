@@ -1,17 +1,10 @@
 package br.ufal.ic.academico.resources;
 
-import br.ufal.ic.academico.AcademicoApp;
-import br.ufal.ic.academico.ConfigApp;
 import br.ufal.ic.academico.models.course.CourseDTO;
 import br.ufal.ic.academico.models.department.DepartmentDTO;
 import br.ufal.ic.academico.models.discipline.DisciplineDTO;
 import br.ufal.ic.academico.models.person.student.StudentDTO;
 import br.ufal.ic.academico.models.secretary.SecretaryDTO;
-import ch.qos.logback.classic.Level;
-import com.github.javafaker.Faker;
-import io.dropwizard.logging.BootstrapLogging;
-import io.dropwizard.testing.ResourceHelpers;
-import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 
 import java.util.ArrayList;
@@ -29,25 +22,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
-class StudentIntegrationTest {
-    static {
-        BootstrapLogging.bootstrap(Level.DEBUG);
-    }
-
+class StudentIntegrationTest extends IntegrationTestBase {
     private List<StudentDTO> students = new ArrayList<>();
-
-    private static DropwizardAppExtension<ConfigApp> RULE = new DropwizardAppExtension(AcademicoApp.class,
-            ResourceHelpers.resourceFilePath("config-test.yml"));
-
-    private String url;
-    private Faker faker = new Faker();
-    private BasicBackground background;
-
-    @BeforeEach
-    void setup() {
-        url = "http://localhost:" + RULE.getLocalPort() + "/academicotest/";
-        this.background = new BasicBackground(url);
-    }
 
     @Test
     void studentResources() {

@@ -1,18 +1,11 @@
 package br.ufal.ic.academico.resources;
 
-import br.ufal.ic.academico.AcademicoApp;
-import br.ufal.ic.academico.ConfigApp;
 import br.ufal.ic.academico.models.course.CourseDTO;
 import br.ufal.ic.academico.models.department.DepartmentDTO;
 import br.ufal.ic.academico.models.discipline.DisciplineDTO;
 import br.ufal.ic.academico.models.person.student.StudentDTO;
 import br.ufal.ic.academico.models.person.teacher.TeacherDTO;
 import br.ufal.ic.academico.models.secretary.SecretaryDTO;
-import ch.qos.logback.classic.Level;
-import com.github.javafaker.Faker;
-import io.dropwizard.logging.BootstrapLogging;
-import io.dropwizard.testing.ResourceHelpers;
-import io.dropwizard.testing.junit5.DropwizardAppExtension;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 
 import java.util.ArrayList;
@@ -22,30 +15,14 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
-class TeacherIntegrationTest {
-    static {
-        BootstrapLogging.bootstrap(Level.DEBUG);
-    }
-
+class TeacherIntegrationTest extends IntegrationTestBase {
     private List<TeacherDTO> teachers = new ArrayList<>();
-
-    private static DropwizardAppExtension<ConfigApp> RULE = new DropwizardAppExtension(AcademicoApp.class,
-            ResourceHelpers.resourceFilePath("config-test.yml"));
-
-    private String url;
-    private Faker faker = new Faker();
-
-    @BeforeEach
-    void setup() {
-        this.url = "http://localhost:" + RULE.getLocalPort() + "/academicotest/";
-    }
 
     @Test
     void teacherResources() {
@@ -139,14 +116,10 @@ class TeacherIntegrationTest {
 
     private void alocateTeacher() {
         // setup para os testes
-        final DepartmentDTO department = RULE.client().target(url + "department").request()
-                .post(Entity.json(new DepartmentDTO(null, "IC", null)), DepartmentDTO.class);
-        final SecretaryDTO secretary = RULE.client().target(url + "department/" + department.getId() + "/secretary").request()
-                .post(Entity.json(new SecretaryDTO(null, "GRADUATION", null)), SecretaryDTO.class);
-        final CourseDTO course = RULE.client().target(url + "secretary/" + secretary.getId() + "/course").request()
-                .post(Entity.json(new CourseDTO(null, "Ciência da Computação", null)), CourseDTO.class);
-        final DisciplineDTO discipline = RULE.client().target(url + "course/" + course.getId() + "/discipline").request()
-                .post(Entity.json(new DisciplineDTO(null, "CC001", "Programação 1", null, null, null, null, null)), DisciplineDTO.class);
+        final DepartmentDTO department = background.createDepartment(RULE, "IC");
+        final SecretaryDTO secretary = background.createSecretary(RULE, department, "GRADUATION");
+        final CourseDTO course = background.createCourse(RULE, secretary, "Ciência da Computação");
+        final DisciplineDTO discipline = background.createDiscipline(RULE, course, "CC001", "Programação 1", 0);
 
         // testes da alocação do Teacher na Discipline
         final TeacherDTO teacher = teachers.get(0);
