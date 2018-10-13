@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import javax.annotation.Nullable;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -25,6 +26,7 @@ public class Student extends Person {
 
     @Setter
     @ManyToOne(cascade = CascadeType.ALL)
+    @Nullable
     Course course;
 
     @ElementCollection
@@ -41,7 +43,7 @@ public class Student extends Person {
     }
 
     public void update(StudentDTO entity) {
-        super.update(entity.firstName, entity.lastName, "STUDENT");
+        super.update(entity.firstName, entity.lastName);
     }
 
     public boolean completeDiscipline(Discipline discipline) {

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class Course {
     String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
+    @Nullable
     List<Discipline> disciplines;
 
     public Course(CourseDTO entity) {

@@ -4,6 +4,7 @@ import br.ufal.ic.academico.models.GeneralDAO;
 import br.ufal.ic.academico.models.course.Course;
 import br.ufal.ic.academico.models.department.Department;
 import br.ufal.ic.academico.models.person.student.Student;
+import br.ufal.ic.academico.models.person.teacher.Teacher;
 import br.ufal.ic.academico.models.secretary.Secretary;
 import br.ufal.ic.academico.models.secretary.SecretaryDAO;
 import org.hibernate.SessionFactory;
@@ -64,5 +65,17 @@ public class DisciplineDAO extends GeneralDAO<Discipline> {
 
         SecretaryDAO secretaryDAO = new SecretaryDAO(currentSession().getSessionFactory());
         return secretaryDAO.getDepartment(secretary);
+    }
+
+    public List<Discipline> deallocateTeacherFromAllDisciplines(Teacher t) {
+        List<Discipline> disciplines = new ArrayList<>();
+        List<Discipline> allDisciplines = this.getAll();
+        for (Discipline d : allDisciplines) {
+            if (d.teacher != null && d.teacher.getId().equals(t.getId())) {
+                d.teacher = null;
+                this.persist(d);
+            }
+        }
+        return disciplines;
     }
 }

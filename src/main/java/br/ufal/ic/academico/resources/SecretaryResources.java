@@ -100,7 +100,8 @@ public class SecretaryResources {
         Course c = new Course(entity);
         if (s.addCourse(c)) {
             courseDAO.persist(c);
-            return Response.ok(new SecretaryDTO(secretaryDAO.persist(s))).build();
+            secretaryDAO.persist(s);
+            return Response.ok(new CourseDTO(c)).build();
         }
         return Response.status(400).build();
     }

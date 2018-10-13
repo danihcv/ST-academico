@@ -19,6 +19,6 @@ public class Teacher extends Person {
     }
 
     public void update(TeacherDTO entity) {
-        super.update(entity.firstName, entity.lastName, "TEACHER");
+        super.update(entity.firstName, entity.lastName);
     }
 }

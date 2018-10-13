@@ -114,7 +114,8 @@ public class CourseResources {
         Discipline d = new Discipline(entity);
         disciplineDAO.persist(d);
         c.addDiscipline(d);
-        return Response.ok(new CourseDTO(courseDAO.persist(c))).build();
+        courseDAO.persist(c);
+        return Response.ok(new DisciplineDTO(d)).build();
     }
 
     private List<CourseDTO> courseListToDTOList(List<Course> list) {

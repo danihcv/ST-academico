@@ -26,15 +26,10 @@ public class Person {
         this.role = role;
     }
 
-    protected void update(String firstname, String lastName, String role) {
-        if (firstname != null) {
-            this.firstname = firstname;
-        }
+    protected void update(String firstname, String lastName) {
+        this.firstname = firstname;
         if (lastName != null) {
             this.lastName = lastName;
-        }
-        if (role != null) {
-            this.role = role;
         }
     }
 }

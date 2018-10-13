@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class Discipline {
 
     @Setter
     @OneToOne(cascade = CascadeType.ALL)
+    @Nullable
     Teacher teacher;
 
     @ManyToMany(cascade = CascadeType.ALL)

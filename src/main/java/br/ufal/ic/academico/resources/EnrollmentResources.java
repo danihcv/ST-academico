@@ -86,7 +86,7 @@ public class EnrollmentResources {
         s.update(entity);
         return Response.ok(new StudentDTO(studentDAO.persist(s))).build();
     }
-// ToDo Resolver esse DELETE
+// ToDo Resolver esse DELETE: settar Student.Course para nulo?
     @DELETE
     @Path("/student/{id}")
     @UnitOfWork
@@ -162,6 +162,8 @@ public class EnrollmentResources {
         if (t == null) {
             return Response.status(404).entity("Teacher not found.").build();
         }
+
+        disciplineDAO.deallocateTeacherFromAllDisciplines(t);
         teacherDAO.delete(t);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
@@ -303,17 +305,13 @@ public class EnrollmentResources {
 
     private List<StudentDTO> studentListToDTOList(List<Student> list) {
         List<StudentDTO> dtoList = new ArrayList<>();
-        if (list != null) {
-            list.forEach(s -> dtoList.add(new StudentDTO(s)));
-        }
+        list.forEach(s -> dtoList.add(new StudentDTO(s)));
         return dtoList;
     }
 
     private List<TeacherDTO> teacherListToDTOList(List<Teacher> list) {
         List<TeacherDTO> dtoList = new ArrayList<>();
-        if (list != null) {
-            list.forEach(s -> dtoList.add(new TeacherDTO(s)));
-        }
+        list.forEach(s -> dtoList.add(new TeacherDTO(s)));
         return dtoList;
     }
 

@@ -135,7 +135,8 @@ public class DepartmentResources {
             }
             d.setPostGraduation(s);
         }
-        return Response.ok(new DepartmentDTO(departmentDAO.persist(d))).build();
+        departmentDAO.persist(d);
+        return Response.ok(new SecretaryDTO(s)).build();
     }
 
     private List<DepartmentDTO> departmentListToDTOList(List<Department> list) {
