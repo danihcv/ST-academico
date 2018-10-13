@@ -86,7 +86,7 @@ public class EnrollmentResources {
         s.update(entity);
         return Response.ok(new StudentDTO(studentDAO.persist(s))).build();
     }
-// ToDo Resolver esse DELETE: settar Student.Course para nulo?
+
     @DELETE
     @Path("/student/{id}")
     @UnitOfWork
