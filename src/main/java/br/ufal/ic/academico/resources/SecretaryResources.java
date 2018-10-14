@@ -47,7 +47,7 @@ public class SecretaryResources {
         }
         return Response.ok(new SecretaryDTO(s)).build();
     }
-// ToDo Resolver esse DELETE
+
     @DELETE
     @Path("/{id}")
     @UnitOfWork
