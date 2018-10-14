@@ -27,7 +27,14 @@ class SecretaryIntegrationTest extends IntegrationTestBase {
         SecretaryDTO secretary = background.createSecretary(RULE, department, "GRADUATION");
         department.secretaries.add(secretary);
         getSecretaryByID(secretary);
+
+        assertEquals(1, RULE.client().target(url + "secretary").request().get(new GenericType<List<SecretaryDTO>>(){}).size(),
+                "Listagem de Secretaries não foi atualizada corretamente após criação de Secretary");
+
         deleteSecretary(secretary, department);
+
+        assertEquals(0, RULE.client().target(url + "secretary").request().get(new GenericType<List<SecretaryDTO>>(){}).size(),
+                "Listagem de Secretaries não foi atualizada corretamente após remoção de Secretary");
 
         secretary = background.createSecretary(RULE, department, "POST-GRADUATION");
         department.secretaries.add(secretary);
