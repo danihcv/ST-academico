@@ -145,9 +145,7 @@ public class DepartmentResources {
 
     private List<DepartmentDTO> departmentListToDTOList(List<Department> list) {
         List<DepartmentDTO> dtoList = new ArrayList<>();
-        if (list != null) {
-            list.forEach(d -> dtoList.add(new DepartmentDTO(d)));
-        }
+        list.forEach(d -> dtoList.add(new DepartmentDTO(d)));
         return dtoList;
     }
 }
