@@ -4,7 +4,6 @@ import br.ufal.ic.academico.models.discipline.Discipline;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

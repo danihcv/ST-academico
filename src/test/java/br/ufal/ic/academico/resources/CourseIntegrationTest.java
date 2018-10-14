@@ -37,7 +37,8 @@ class CourseIntegrationTest extends IntegrationTestBase {
 
         course = background.createCourse(RULE, secretary, "Sistemas de Informação");
         getAllDisciplinesFromCourse(course, 0);
-        createDiscipline(course, "CC001", "Programação 1", 25, 36, new ArrayList<>());
+        DisciplineDTO discipline = createDiscipline(course, "CC001", "Programação 1", 25, 36, new ArrayList<>());
+        deleteCourseWithAssociatedDiscipline(course, secretary, discipline);
     }
 
     private void getCourseByID(CourseDTO course) {
@@ -94,7 +95,7 @@ class CourseIntegrationTest extends IntegrationTestBase {
         assertEquals(expectedDisciplinesQuantity, response.size(), "Quantidade de Disciplines associdadas ao Course está diferente da esperada");
     }
 
-    private void createDiscipline(CourseDTO course, String code, String name, int credits, int requiredCredits,
+    private DisciplineDTO createDiscipline(CourseDTO course, String code, String name, int credits, int requiredCredits,
                                   List<String> requiredDisciplines) {
         DisciplineDTO entity = new DisciplineDTO();
         entity.code = code;
@@ -135,5 +136,18 @@ class CourseIntegrationTest extends IntegrationTestBase {
         assertNull(response.teacher, "Discipline criada possui um Teacher associado");
         assertEquals(requiredDisciplines.size(), response.requiredDisciplines.size(),
                 "Quantidade de Required Disciplines não está igual à quantidade informada");
+
+        return response;
+    }
+
+    private void deleteCourseWithAssociatedDiscipline(CourseDTO course, SecretaryDTO secretary, DisciplineDTO discipline) {
+        assertDoesNotThrow(() -> RULE.client().target(url + "course/" + course.getId()).request()
+                .delete(DisciplineDTO.class), "Falhou ao deletar Course válido");
+
+        assertDoesNotThrow(() -> RULE.client().target(url + "secretary/" + secretary.getId()).request()
+                .delete(DisciplineDTO.class), "Falhou ao recuperar Secretary associada ao Course deletado");
+
+        assertThrows(NotFoundException.class, () -> RULE.client().target(url + "discipline/" + discipline.getId()).request()
+                .get(DisciplineDTO.class), "API não retornou status 404 ao recuperar Discipline associada ao Course deletado");
     }
 }
