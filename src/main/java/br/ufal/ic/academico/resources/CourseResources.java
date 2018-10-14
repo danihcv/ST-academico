@@ -102,13 +102,17 @@ public class CourseResources {
     public Response createDiscipline(@PathParam("id") Long id, DisciplineDTO entity) {
         log.info("create discipline in course {}", id);
 
-        if (entity.getCode() == null) {
-            return Response.status(400).entity("Discipline code required.").build();
-        }
-
         Course c = courseDAO.get(id);
         if (c == null) {
             return Response.status(404).entity("Course not found.").build();
+        }
+
+        if (entity.getCode() == null || entity.getCode().trim().isEmpty()) {
+            return Response.status(400).entity("Discipline code required.").build();
+        }
+
+        if (entity.getName() == null || entity.getName().trim().isEmpty()) {
+            return Response.status(400).entity("Discipline code required.").build();
         }
 
         Discipline d = new Discipline(entity);
@@ -120,9 +124,7 @@ public class CourseResources {
 
     private List<CourseDTO> courseListToDTOList(List<Course> list) {
         List<CourseDTO> dtoList = new ArrayList<>();
-        if (list != null) {
-            list.forEach(c -> dtoList.add(new CourseDTO(c)));
-        }
+        list.forEach(c -> dtoList.add(new CourseDTO(c)));
         return dtoList;
     }
 }

@@ -14,13 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class DisciplineDTO {
-    Long id;
-    String code;
-    String name;
-    Integer credits = 0, requiredCredits = 0;
-    List<String> requiredDisciplines;
-    String teacher;
-    List<StudentDTO> students;
+    public Long id;
+    public String code;
+    public String name;
+    public Integer credits = 0, requiredCredits = 0;
+    public List<String> requiredDisciplines;
+    public String teacher;
+    public List<StudentDTO> students;
 
     public DisciplineDTO(Discipline entity) {
         this.id = entity.getId();
