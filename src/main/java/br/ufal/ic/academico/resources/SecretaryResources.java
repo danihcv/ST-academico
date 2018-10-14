@@ -82,7 +82,7 @@ public class SecretaryResources {
         if (s == null) {
             return Response.status(404).entity("Secretary not found.").build();
         }
-        return Response.ok(s.getCourses().stream().map(Course::getName).toArray()).build();
+        return Response.ok(s.getCourses().stream().map(c -> String.format("[%s] %s", c.getId(), c.getName())).toArray()).build();
     }
 
     @POST
@@ -96,21 +96,20 @@ public class SecretaryResources {
         if (s == null) {
             return Response.status(404).entity("Secretary not found.").build();
         }
+        if (entity.name == null || entity.name.trim().isEmpty()) {
+            return Response.status(400).entity("Course name is required.").build();
+        }
 
         Course c = new Course(entity);
-        if (s.addCourse(c)) {
-            courseDAO.persist(c);
-            secretaryDAO.persist(s);
-            return Response.ok(new CourseDTO(c)).build();
-        }
-        return Response.status(400).build();
+        s.addCourse(c);
+        courseDAO.persist(c);
+        secretaryDAO.persist(s);
+        return Response.ok(new CourseDTO(c)).build();
     }
 
     private List<SecretaryDTO> secretaryListToDTOList(List<Secretary> list) {
         List<SecretaryDTO> dtoList = new ArrayList<>();
-        if (list != null) {
-            list.forEach(s -> dtoList.add(new SecretaryDTO(s)));
-        }
+        list.forEach(s -> dtoList.add(new SecretaryDTO(s)));
         return dtoList;
     }
 }

@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@ToString
 public class SecretaryDTO {
     public Long id;
     public String type;
@@ -23,17 +22,16 @@ public class SecretaryDTO {
     public SecretaryDTO(Secretary entity) {
         this.id = entity.getId();
         this.type = entity.type;
-        if (entity.courses != null) {
-            ArrayList<DisciplineDTO> dtoList = new ArrayList<>();
-            entity.courses.forEach(c -> dtoList.addAll(c.getDisciplines().stream().map(DisciplineDTO::new).collect(Collectors.toList())));
-            this.disciplines = dtoList;
-        }
+        ArrayList<DisciplineDTO> dtoList = new ArrayList<>();
+        entity.courses.forEach(c -> {
+            assert c.getDisciplines() != null;
+            dtoList.addAll(c.getDisciplines().stream().map(DisciplineDTO::new).collect(Collectors.toList()));
+        });
+        this.disciplines = dtoList;
     }
 
     @Getter
     @RequiredArgsConstructor
-    @AllArgsConstructor
-    @ToString
     public static class DisciplineDTO {
         Long id;
         String code, name;

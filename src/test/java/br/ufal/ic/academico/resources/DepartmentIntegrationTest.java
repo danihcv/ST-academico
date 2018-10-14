@@ -2,7 +2,9 @@ package br.ufal.ic.academico.resources;
 
 import br.ufal.ic.academico.models.department.DepartmentDTO;
 import br.ufal.ic.academico.models.secretary.SecretaryDTO;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -13,6 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ExtendWith(DropwizardExtensionsSupport.class)
 class DepartmentIntegrationTest extends IntegrationTestBase {
     @Test
     void departmentResources() {
@@ -29,7 +32,7 @@ class DepartmentIntegrationTest extends IntegrationTestBase {
         createSecretary(department, "POST-GRADUATION");
         getDepartmentByID(department);
         getDepartmentSecretaries(department);
-        SecretaryDTO secretary = createSecretary(department, "GRADUATION");
+        createSecretary(department, "GRADUATION");
         getDepartmentByID(department);
         getDepartmentSecretaries(department);
     }
@@ -53,7 +56,7 @@ class DepartmentIntegrationTest extends IntegrationTestBase {
         return response;
     }
 
-    private DepartmentDTO getDepartmentByID(DepartmentDTO department) {
+    private void getDepartmentByID(DepartmentDTO department) {
         assertThrows(NotFoundException.class, () -> RULE.client().target(url + "department/0").request()
                 .get(DepartmentDTO.class), "API não retornou status 404 ao recuperar um Department com ID inválido");
 
@@ -62,8 +65,6 @@ class DepartmentIntegrationTest extends IntegrationTestBase {
         assertEquals(department.name, response.name, "Name do Department retornado está diferente do esperado");
         assertEquals(department.secretaries.size(), response.secretaries.size(),
                 "Lista de Secretaries do Department retornada está diferente da esperada");
-
-        return response;
     }
 
     private DepartmentDTO updateDepartment(DepartmentDTO department) {

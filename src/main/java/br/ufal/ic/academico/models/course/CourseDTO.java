@@ -14,9 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class CourseDTO {
-    Long id;
-    String name;
-    List<DisciplineDTO> disciplines;
+    public Long id;
+    public String name;
+    private List<DisciplineDTO> disciplines;
 
     public CourseDTO(Course entity) {
         this.id = entity.getId();
