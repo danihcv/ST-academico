@@ -62,7 +62,7 @@ public class CourseResources {
         c.update(entity);
         return Response.ok(new CourseDTO(courseDAO.persist(c))).build();
     }
-// ToDo Resolver esse DELETE
+
     @DELETE
     @Path("/{id}")
     @UnitOfWork

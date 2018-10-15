@@ -7,10 +7,6 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- *
- * @author Willy
- */
 @Getter
 @Setter
 public class ConfigApp extends Configuration {

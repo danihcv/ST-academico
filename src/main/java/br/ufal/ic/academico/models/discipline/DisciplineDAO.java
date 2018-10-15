@@ -81,7 +81,7 @@ public class DisciplineDAO extends GeneralDAO<Discipline> {
     public void disenrollStudentFromAll(Student student) {
         List<Discipline> allDisciplines = this.getAll();
         for (Discipline d : allDisciplines) {
-            if (d.students != null && d.students.contains(student)) {
+            if (d.students.contains(student)) {
                 d.removeStudent(student);
                 this.persist(d);
             }

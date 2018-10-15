@@ -23,10 +23,6 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- *
- * @author Willy
- */
 @Slf4j
 public class AcademicoApp extends Application<ConfigApp> {
 

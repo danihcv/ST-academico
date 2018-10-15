@@ -58,7 +58,7 @@ public class DisciplineResources {
         d.update(entity);
         return Response.ok(new DisciplineDTO(disciplineDAO.persist(d))).build();
     }
-// ToDo Resolver esse DELETE
+
     @DELETE
     @Path("/{id}")
     @UnitOfWork
@@ -79,9 +79,7 @@ public class DisciplineResources {
 
     private List<DisciplineDTO> disciplineListToDTOList(List<Discipline> list) {
         List<DisciplineDTO> dtoList = new ArrayList<>();
-        if (list != null) {
-            list.forEach(d -> dtoList.add(new DisciplineDTO(d)));
-        }
+        list.forEach(d -> dtoList.add(new DisciplineDTO(d)));
         return dtoList;
     }
 }

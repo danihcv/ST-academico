@@ -4,7 +4,6 @@ import br.ufal.ic.academico.models.person.student.Student;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +11,11 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 @AllArgsConstructor
-@ToString
 public class DisciplineDTO {
     public Long id;
     public String code;
     public String name;
-    public Integer credits = 0, requiredCredits = 0;
+    public Integer credits, requiredCredits;
     public List<String> requiredDisciplines;
     public String teacher;
     public List<StudentDTO> students;
@@ -33,9 +31,7 @@ public class DisciplineDTO {
             this.teacher = entity.teacher.getFirstname() + (entity.teacher.getLastName() != null ? " " + entity.teacher.getLastName() : "");
         }
         ArrayList<StudentDTO> dtoList = new ArrayList<>();
-        if (entity.students != null) {
-            entity.students.forEach(s -> dtoList.add(new StudentDTO(s)));
-        }
+        entity.students.forEach(s -> dtoList.add(new StudentDTO(s)));
         this.students = dtoList;
     }
 

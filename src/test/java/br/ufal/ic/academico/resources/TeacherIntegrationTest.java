@@ -119,7 +119,7 @@ class TeacherIntegrationTest extends IntegrationTestBase {
         final DepartmentDTO department = background.createDepartment(RULE, "IC");
         final SecretaryDTO secretary = background.createSecretary(RULE, department, "GRADUATION");
         final CourseDTO course = background.createCourse(RULE, secretary, "Ciência da Computação");
-        final DisciplineDTO discipline = background.createDiscipline(RULE, course, "CC001", "Programação 1", 0);
+        final DisciplineDTO discipline = background.createDiscipline(RULE, course, "CC001", "Programação 1", null);
 
         // testes da alocação do Teacher na Discipline
         final TeacherDTO teacher = teachers.get(0);

@@ -32,7 +32,7 @@ class BasicBackground {
     }
 
     DisciplineDTO createDiscipline(DropwizardAppExtension<ConfigApp> RULE, CourseDTO course, String disciplineCode,
-                                   String disciplineName, int disciplineCredits) {
+                                   String disciplineName, Integer disciplineCredits) {
         return RULE.client().target(url + "course/" + course.getId() + "/discipline").request()
                 .post(Entity.json(new DisciplineDTO(null, disciplineCode, disciplineName, disciplineCredits, null, null, null, null)), DisciplineDTO.class);
     }
