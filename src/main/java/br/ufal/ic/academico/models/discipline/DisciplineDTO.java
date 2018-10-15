@@ -28,7 +28,7 @@ public class DisciplineDTO {
         this.requiredCredits = entity.requiredCredits;
         this.requiredDisciplines = entity.requiredDisciplines;
         if (entity.teacher != null) {
-            this.teacher = entity.teacher.getFirstname() + (entity.teacher.getLastName() != null ? " " + entity.teacher.getLastName() : "");
+            this.teacher = entity.teacher.getFirstName() + (entity.teacher.getLastName() != null ? " " + entity.teacher.getLastName() : "");
         }
         ArrayList<StudentDTO> dtoList = new ArrayList<>();
         entity.students.forEach(s -> dtoList.add(new StudentDTO(s)));
@@ -43,7 +43,7 @@ public class DisciplineDTO {
 
         StudentDTO(Student entity) {
             this.id = entity.getId();
-            this.name = entity.getFirstname() + (entity.getLastName() != null ? " " + entity.getLastName() : "");
+            this.name = entity.getFirstName() + (entity.getLastName() != null ? " " + entity.getLastName() : "");
         }
     }
 }

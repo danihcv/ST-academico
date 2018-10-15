@@ -19,7 +19,7 @@ public class StudentDTO {
 
     public StudentDTO(Student entity) {
         this.id = entity.getId();
-        this.firstName = entity.getFirstname();
+        this.firstName = entity.getFirstName();
         this.lastName = entity.getLastName();
         this.role = entity.getRole();
         this.credits = entity.getCredits();

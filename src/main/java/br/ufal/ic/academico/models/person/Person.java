@@ -18,16 +18,16 @@ public class Person {
     private Long id;
 
     @Setter
-    protected String firstname, lastName, role;
+    protected String firstName, lastName, role;
 
-    public Person(String firstname, String lastName, String role) {
-        this.firstname = firstname;
+    public Person(String firstName, String lastName, String role) {
+        this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
     }
 
-    protected void update(String firstname, String lastName) {
-        this.firstname = firstname;
+    protected void update(String firstName, String lastName) {
+        this.firstName = firstName;
         if (lastName != null) {
             this.lastName = lastName;
         }

@@ -32,8 +32,8 @@ public class Student extends Person {
     @ElementCollection
     List<String> completedDisciplines;
 
-    public Student(String firstname, String lastName) {
-        super(firstname, lastName, "STUDENT");
+    public Student(String firstName, String lastName) {
+        super(firstName, lastName, "STUDENT");
         this.credits = 0;
         this.completedDisciplines = new ArrayList<>();
     }

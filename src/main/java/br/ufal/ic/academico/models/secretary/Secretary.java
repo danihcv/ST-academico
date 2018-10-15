@@ -1,7 +1,6 @@
 package br.ufal.ic.academico.models.secretary;
 
 import br.ufal.ic.academico.models.course.Course;
-import br.ufal.ic.academico.models.course.CourseDTO;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

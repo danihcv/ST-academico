@@ -102,7 +102,7 @@
 //
 //            assertNotNull(response);
 //            assertEquals(expected.getId(), response.id, "ID do Student retornado é diferente do esperado");
-//            assertEquals(studentList.get(i - 1).getFirstname(), response.firstName,
+//            assertEquals(studentList.get(i - 1).getFirstName(), response.firstName,
 //                    "First Name do Student retornado é diferente do esperado");
 //            assertEquals(studentList.get(i - 1).getLastName(), response.lastName,
 //                    "Last Name do Student retornado é diferente do esperado");

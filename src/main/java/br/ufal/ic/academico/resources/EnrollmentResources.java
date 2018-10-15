@@ -306,7 +306,7 @@ public class EnrollmentResources {
         for (Discipline d : disciplines) {
             disciplineProofs.add(new ProofDiscipline(d.getCode(), d.getName()));
         }
-        return Response.ok(new Proof(student.getId(), student.getFirstname() + (student.getLastName() != null ? " " + student.getLastName() : ""),
+        return Response.ok(new Proof(student.getId(), student.getFirstName() + (student.getLastName() != null ? " " + student.getLastName() : ""),
                 disciplineProofs)).build();
     }
 
