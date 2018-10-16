@@ -4,6 +4,9 @@ import br.ufal.ic.academico.models.course.CourseDTO;
 import br.ufal.ic.academico.models.department.DepartmentDTO;
 import br.ufal.ic.academico.models.discipline.Discipline;
 import br.ufal.ic.academico.models.discipline.DisciplineDTO;
+import br.ufal.ic.academico.models.person.student.Student;
+import br.ufal.ic.academico.models.person.student.StudentDTO;
+import br.ufal.ic.academico.models.person.teacher.TeacherDTO;
 import br.ufal.ic.academico.models.secretary.SecretaryDTO;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.junit.jupiter.api.Test;
@@ -40,13 +43,20 @@ class DisciplineIntegrationTest extends IntegrationTestBase {
         assertEquals(1, RULE.client().target(url + "discipline").request().get(new GenericType<List<DisciplineDTO>>(){}).size(),
                 "Listagem de Disciplines não está refletindo a Discipline criada");
 
-        deleteDiscipline(discipline, course);
+        StudentDTO student = background.createStudent(RULE, faker.name().firstName(), faker.name().lastName(), rand.nextInt());
+        background.enrollInCourse(RULE, student, course);
+        background.enrollInDiscipline(RULE, student, discipline);
+        discipline = getDisciplineByID(discipline);
+        TeacherDTO teacher = background.createTeacher(RULE, faker.name().firstName(), faker.name().lastName());
+        discipline.teacher = teacher.firstName + " " + teacher.lastName;
+
+        deleteDiscipline(discipline, course, teacher);
 
         assertEquals(0, RULE.client().target(url + "discipline").request().get(new GenericType<List<DisciplineDTO>>(){}).size(),
                 "Listagem de Disciplines não está refletindo a Discipline deletada");
     }
 
-    private void getDisciplineByID(DisciplineDTO discipline) {
+    private DisciplineDTO getDisciplineByID(DisciplineDTO discipline) {
         assertThrows(NotFoundException.class, () -> RULE.client().target(url + "discipline/0").request().get(DisciplineDTO.class),
                 "API não retornou status 404 ao recuperar uma Discipline com ID inválida");
 
@@ -58,6 +68,8 @@ class DisciplineIntegrationTest extends IntegrationTestBase {
         assertEquals(discipline.requiredCredits, response.requiredCredits, "Discipline recuperada possui Required Credits diferente do informado");
         assertEquals(discipline.requiredDisciplines.size(), response.requiredDisciplines.size(),
                 "Discipline recuperada possui Quantidade de Required Disciplines diferente do informado");
+
+        return response;
     }
 
     private DisciplineDTO updateDiscipline(DisciplineDTO discipline, String newName, int newCredits, int newRequiredCredits,
@@ -101,7 +113,7 @@ class DisciplineIntegrationTest extends IntegrationTestBase {
         return response;
     }
 
-    private void deleteDiscipline(DisciplineDTO discipline, CourseDTO course) {
+    private void deleteDiscipline(DisciplineDTO discipline, CourseDTO course, TeacherDTO teacher) {
         assertThrows(NotFoundException.class, () -> RULE.client().target(url + "discipline/0").request().delete(Discipline.class),
                 "API não retornou status 404 ao deletar Discipline com ID inválido");
 
@@ -113,6 +125,15 @@ class DisciplineIntegrationTest extends IntegrationTestBase {
         assertEquals(course.name, response.name, "Ao deletar Discipline, o Course associado teve seu Name alterado");
         assertEquals(course.getDisciplines().size() - 1, response.getDisciplines().size(),
                 "Ao deletar Discipline, o Course associado não teve a quantidade de Disciplines decrescida");
+
+        for (DisciplineDTO.StudentDTO s : discipline.students) {
+            assertDoesNotThrow(() -> RULE.client().target(url + "enrollment/student/" + s.id).request()
+                    .get(DisciplineDTO.StudentDTO.class));
+        }
+
+        if (teacher != null) {
+            assertDoesNotThrow(() -> RULE.client().target(url + "enrollment/teacher/" + teacher.getId()).request().get(TeacherDTO.class));
+        }
 
         course.getDisciplines().remove(discipline);
     }

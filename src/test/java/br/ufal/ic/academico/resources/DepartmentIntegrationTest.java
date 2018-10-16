@@ -35,6 +35,8 @@ class DepartmentIntegrationTest extends IntegrationTestBase {
         createSecretary(department, "GRADUATION");
         getDepartmentByID(department);
         getDepartmentSecretaries(department);
+
+        deleteDepartment(department);
     }
 
     private DepartmentDTO createDepartment() {
@@ -95,6 +97,12 @@ class DepartmentIntegrationTest extends IntegrationTestBase {
                 .delete(DepartmentDTO.class), "API não retornou status 404 ao deletar Department inválido");
         assertDoesNotThrow(() -> RULE.client().target(url + "department/" + department.getId()).request()
                 .delete(DepartmentDTO.class), "Falhou ao deletar Department válido");
+
+        if (department.secretaries.size() > 0) {
+            for (SecretaryDTO sec : department.secretaries) {
+                assertThrows(NotFoundException.class, () -> RULE.client().target(url + "secretary/" + sec.id).request().get(SecretaryDTO.class));
+            }
+        }
     }
 
     private void getDepartmentSecretaries(DepartmentDTO department) {

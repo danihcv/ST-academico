@@ -11,6 +11,8 @@ import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.Random;
+
 @ExtendWith(DropwizardExtensionsSupport.class)
 abstract class IntegrationTestBase {
     static {
@@ -22,6 +24,7 @@ abstract class IntegrationTestBase {
 
     String url;
     Faker faker = new Faker();
+    Random rand = new Random();
     BasicBackground background;
 
     @BeforeEach

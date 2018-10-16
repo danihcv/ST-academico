@@ -41,7 +41,7 @@ public class DisciplineDTO {
         public Long id;
         public String name;
 
-        StudentDTO(Student entity) {
+        public StudentDTO(Student entity) {
             this.id = entity.getId();
             this.name = entity.getFirstName() + (entity.getLastName() != null ? " " + entity.getLastName() : "");
         }

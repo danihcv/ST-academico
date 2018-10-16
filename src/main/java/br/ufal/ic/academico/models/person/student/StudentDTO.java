@@ -1,5 +1,6 @@
 package br.ufal.ic.academico.models.person.student;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@AllArgsConstructor
 @RequiredArgsConstructor
 @ToString
 public class StudentDTO {

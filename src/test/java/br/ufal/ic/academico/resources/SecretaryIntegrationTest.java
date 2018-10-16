@@ -12,6 +12,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +32,7 @@ class SecretaryIntegrationTest extends IntegrationTestBase {
         assertEquals(1, RULE.client().target(url + "secretary").request().get(new GenericType<List<SecretaryDTO>>(){}).size(),
                 "Listagem de Secretaries não foi atualizada corretamente após criação de Secretary");
 
-        deleteSecretary(secretary, department);
+        deleteSecretary(secretary, department, null);
 
         assertEquals(0, RULE.client().target(url + "secretary").request().get(new GenericType<List<SecretaryDTO>>(){}).size(),
                 "Listagem de Secretaries não foi atualizada corretamente após remoção de Secretary");
@@ -41,9 +42,11 @@ class SecretaryIntegrationTest extends IntegrationTestBase {
         getSecretaryByID(secretary);
         getCoursesFromSecretary(secretary, 0);
 
-        createCourse(secretary, "Engenharia da Computação");
+        List<CourseDTO> courses = new ArrayList<>();
+        courses.add(createCourse(secretary, "Engenharia da Computação"));
         getCoursesFromSecretary(secretary, 1);
-        deleteSecretary(secretary, department);
+
+        deleteSecretary(secretary, department, courses);
     }
 
     private void getSecretaryByID(SecretaryDTO secretary) {
@@ -56,7 +59,7 @@ class SecretaryIntegrationTest extends IntegrationTestBase {
         assertEquals(secretary.disciplines, response.disciplines, "Secretary retornada possui uma lista de Disciplines diferente da informada");
     }
 
-    private void deleteSecretary(SecretaryDTO secretary, DepartmentDTO department) {
+    private void deleteSecretary(SecretaryDTO secretary, DepartmentDTO department, List<CourseDTO> courses) {
         assertThrows(NotFoundException.class, () -> RULE.client().target(url + "secretary/0").request()
                 .delete(SecretaryDTO.class), "API não retornou status 404 ao deletar uma Secretary inválida");
 
@@ -67,6 +70,12 @@ class SecretaryIntegrationTest extends IntegrationTestBase {
         assertEquals(department.id, response.id, "Department teve seu ID alterado ao remover uma Secretary associada");
         assertEquals(department.secretaries.size() - 1, response.secretaries.size(),
                 "Quantidade de Secretaries associadas ao Department não decresceu ao deletar uma Secretary associada");
+
+        if (courses != null) {
+            for (CourseDTO course : courses) {
+                assertThrows(NotFoundException.class, () -> RULE.client().target(url + "course/" + course.id).request().get(CourseDTO.class));
+            }
+        }
 
         department.secretaries.remove(secretary);
     }
@@ -80,7 +89,7 @@ class SecretaryIntegrationTest extends IntegrationTestBase {
         assertEquals(expectedCoursesQuantity, response.size(), "Quantidade de Courses associados à Secretary não está conforme o esperado");
     }
 
-    private void createCourse(SecretaryDTO secretary, String courseName) {
+    private CourseDTO createCourse(SecretaryDTO secretary, String courseName) {
         assertThrows(NotFoundException.class, () -> RULE.client().target(url + "secretary/0/course").request()
                 .post(Entity.json(new CourseDTO()), CourseDTO.class),
                 "API não retornou status 404 ao criar um Course numa Secretary inválida");
@@ -101,5 +110,7 @@ class SecretaryIntegrationTest extends IntegrationTestBase {
         assertNotNull(response.getId(), "Course criado não possui ID");
         assertEquals(courseName, response.name, "Name do Course criado não corresponde com o informado");
         assertEquals(0, response.getDisciplines().size(), "Course criado possui Disciplines associadas");
+
+        return response;
     }
 }

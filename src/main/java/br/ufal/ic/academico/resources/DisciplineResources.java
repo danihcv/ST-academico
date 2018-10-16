@@ -73,6 +73,7 @@ public class DisciplineResources {
         Course c = disciplineDAO.getCourse(d);
         c.deleteDiscipline(d);
         courseDAO.persist(c);
+        disciplineDAO.disenrollStudents(d);
         disciplineDAO.delete(d);
         return Response.noContent().build();
     }

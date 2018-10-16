@@ -87,4 +87,9 @@ public class DisciplineDAO extends GeneralDAO<Discipline> {
             }
         }
     }
+
+    public void disenrollStudents(Discipline discipline) {
+        discipline.getStudents().clear();
+        this.persist(discipline);
+    }
 }
